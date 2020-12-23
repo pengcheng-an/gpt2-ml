@@ -199,12 +199,13 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
                                                  feed_dict={initial_context: [context_formatted] * batch_size_per_chunk,
                                                             eos_token: args.eos_token, min_len: args.min_len,
                                                             p_for_topp: top_p[chunk_i]})
-                tocken_count = 0 # only the first two tockens will be appended
+                tocken_count = 0 # only the first x tockens will be appended
                 for t_i, p_i in zip(tokens_out, probs_out):
                     tocken_count += 1
                     extraction = extract_generated_target(output_tokens=t_i, tokenizer=tokenizer)
                     if (tocken_count <= outputTockensToShow):
-                        gens.append(extraction['extraction']) # only the first two tockens will be appended
+                        print('one tocken added \n')
+                        gens.append(extraction['extraction']) # only the first x tockens will be appended
                         
             l = re.findall('.{1,70}', gens[0].replace('[UNK]', '').replace('##', ''))
             print("\n".join(l))
