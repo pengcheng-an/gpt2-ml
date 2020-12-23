@@ -119,8 +119,8 @@ parser.add_argument(
     help='num_samples',
 )
 parser.add_argument(
-    '-output_tockens_to_show',
-    dest='outputTockensToShow',
+    '-max_sentences_to_show',
+    dest='maxSentencesToShow',
     default=1,
     type=int,
     help='how many output tockens to show for each output sample',
@@ -152,7 +152,7 @@ vocab_file_path = os.path.join(proj_root_path, "tokenization/clue-vocab.txt")
 tokenizer = tokenization.FullTokenizer(vocab_file=vocab_file_path , do_lower_case=True)
 news_config = GroverConfig.from_json_file(args.config_fn)
 
-outputTockensToShow = args.outputTockensToShow
+maxSentencesToShow = args.maxSentencesToShow
 
 # We might have to split the batch into multiple chunks if the batch size is too large
 default_mbs = {12: 32, 24: 16, 48: 3}
@@ -199,20 +199,22 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
                                                  feed_dict={initial_context: [context_formatted] * batch_size_per_chunk,
                                                             eos_token: args.eos_token, min_len: args.min_len,
                                                             p_for_topp: top_p[chunk_i]})
-                tocken_count = 0 # only the first x tockens will be appended
+
                 for t_i, p_i in zip(tokens_out, probs_out):
-                    tocken_count += 1
                     extraction = extract_generated_target(output_tokens=t_i, tokenizer=tokenizer)
-                    if (tocken_count <= outputTockensToShow):
-                        print('one tocken added \n')
-                        gens.append(extraction['extraction']) # only the first x tockens will be appended
+                    gens.append(extraction['extraction']) 
                         
             l = re.findall('.{1,70}', gens[0].replace('[UNK]', '').replace('##', ''))
-            m = "".join(l).split('。')
-            if (len(m) < 3):
-                print("\n".join(m))
-            else:
-                print("\n".join(m[0:3]))
+            m = "".join(l).split('。',maxSentencesToShow)
+            print("\n")
+            count = 0
+            for n in m:
+                count += 1
+                if count <= maxSentencesToShow:
+                    print(n+"。")
+            count = 0
+            print('\n')
+
 
         print('Hello!  Next try:⬇️')
         text = input()
