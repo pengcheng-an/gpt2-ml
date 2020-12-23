@@ -152,6 +152,8 @@ vocab_file_path = os.path.join(proj_root_path, "tokenization/clue-vocab.txt")
 tokenizer = tokenization.FullTokenizer(vocab_file=vocab_file_path , do_lower_case=True)
 news_config = GroverConfig.from_json_file(args.config_fn)
 
+outputTockensToShow = args.outputTockensToShow
+
 # We might have to split the batch into multiple chunks if the batch size is too large
 default_mbs = {12: 32, 24: 16, 48: 3}
 max_batch_size = args.max_batch_size if args.max_batch_size is not None else default_mbs[news_config.num_hidden_layers]
