@@ -208,6 +208,11 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
                         gens.append(extraction['extraction']) # only the first x tockens will be appended
                         
             l = re.findall('.{1,70}', gens[0].replace('[UNK]', '').replace('##', ''))
-            print("\n".join(l))
+            m = "".join(l).split('。')
+            if (len(m) < 3):
+                print("\n".join(m))
+            else:
+                print("\n".join(m[0:3]))
+
         print('Hello!  Next try:⬇️')
         text = input()
