@@ -118,6 +118,13 @@ parser.add_argument(
     type=int,
     help='num_samples',
 )
+parser.add_argument(
+    '-output_tockens_to_show',
+    dest='outputTockensToShow',
+    default=1,
+    type=int,
+    help='how many output tockens to show for each output sample',
+)
 
 def extract_generated_target(output_tokens, tokenizer):
     """
@@ -194,7 +201,7 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
                 for t_i, p_i in zip(tokens_out, probs_out):
                     tocken_count += 1
                     extraction = extract_generated_target(output_tokens=t_i, tokenizer=tokenizer)
-                    if (tocken_count<=2):
+                    if (tocken_count <= outputTockensToShow):
                         gens.append(extraction['extraction']) # only the first two tockens will be appended
                         
             l = re.findall('.{1,70}', gens[0].replace('[UNK]', '').replace('##', ''))
