@@ -169,7 +169,7 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
 
     saver = tf.train.Saver()
     saver.restore(sess, args.ckpt_fn)
-    print('🍺Model loaded. \nInput something please:⬇️')
+    print('🍺Model loaded. \n Hello! Input something please:⬇️')
     text = input()
     while text != "":
         for i in range(args.samples):
@@ -197,5 +197,5 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
 
             l = re.findall('.{1,70}', gens[0].replace('[UNK]', '').replace('##', ''))
             print("\n".join(l))
-        print('Next try:⬇️')
+        print('Hello! Next try:⬇️')
         text = input()
