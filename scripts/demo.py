@@ -192,7 +192,7 @@ with tf.Session(config=tf_config, graph=tf.Graph()) as sess:
                                                             p_for_topp: top_p[chunk_i]})
                 tocken_count = 0 # only the first two tockens will be appended
                 for t_i, p_i in zip(tokens_out, probs_out):
-                    tocken_count++
+                    tocken_count += 1
                     extraction = extract_generated_target(output_tokens=t_i, tokenizer=tokenizer)
                     if (tocken_count<=2):
                         gens.append(extraction['extraction']) # only the first two tockens will be appended
